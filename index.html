@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Developer Finder</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fa-brands fa-github"></i>
+                <h1>Dev<span>Finder</span></h1>
+            </div>
+            <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                <i class="fa-solid fa-sun" id="theme-icon"></i>
+            </button>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section glass-card">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="search-input" placeholder="Search GitHub username..." autocomplete="off">
+                <button id="search-btn" class="primary-btn">Search</button>
+            </div>
+            <div class="search-history-container hidden" id="history-container">
+                <div class="history-header">
+                    <span>Recent Searches</span>
+                    <button id="clear-history" class="text-btn">Clear</button>
+                </div>
+                <div class="history-chips" id="history-chips">
+                    <!-- Chips inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- Empty State -->
+            <div id="empty-state" class="state-container glass-card">
+                <div class="state-icon"><i class="fa-solid fa-code-branch"></i></div>
+                <h2>Explore GitHub Profiles</h2>
+                <p>Search for a developer to see their stats, top languages, and latest repositories.</p>
+            </div>
+
+            <!-- Loading Skeleton -->
+            <div id="loading-state" class="hidden">
+                <div class="skeleton-profile glass-card">
+                    <div class="skeleton-header">
+                        <div class="skeleton-avatar skeleton"></div>
+                        <div class="skeleton-names">
+                            <div class="skeleton-text skeleton skeleton-title"></div>
+                            <div class="skeleton-text skeleton skeleton-subtitle"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-stats">
+                        <div class="skeleton-stat-box skeleton"></div>
+                        <div class="skeleton-stat-box skeleton"></div>
+                        <div class="skeleton-stat-box skeleton"></div>
+                        <div class="skeleton-stat-box skeleton"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="error-state" class="state-container glass-card hidden">
+                <div class="state-icon error-icon"><i class="fa-solid fa-user-astronaut"></i></div>
+                <h2 id="error-title">User Not Found</h2>
+                <p id="error-desc">We couldn't find a GitHub user with that name. Please try again.</p>
+            </div>
+
+            <!-- Profile Content -->
+            <div id="profile-content" class="hidden">
+                <!-- Profile Header Card -->
+                <div class="profile-card glass-card">
+                    <div class="profile-top">
+                        <div class="avatar-container">
+                            <img id="user-avatar" src="" alt="Profile Picture">
+                            <div id="user-badges" class="badges">
+                                <!-- Badges inserted here -->
+                            </div>
+                        </div>
+                        <div class="profile-info">
+                            <div class="profile-title-row">
+                                <div>
+                                    <h2 id="user-name">Name</h2>
+                                    <a href="#" id="user-login" target="_blank">@username</a>
+                                </div>
+                                <div class="profile-actions">
+                                    <button class="icon-btn" id="copy-url-btn" title="Copy Profile URL"><i class="fa-solid fa-link"></i></button>
+                                    <button class="icon-btn" id="share-btn" title="Share Profile"><i class="fa-solid fa-share-nodes"></i></button>
+                                </div>
+                            </div>
+                            <p id="user-bio" class="bio">This profile has no bio.</p>
+                            <p id="user-joined" class="joined-date">Joined date</p>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-details" id="user-details">
+                        <!-- Location, company, blog, email inserted here dynamically -->
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon followers"><i class="fa-solid fa-users"></i></div>
+                        <div class="stat-info">
+                            <h4>Followers</h4>
+                            <span id="stat-followers">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon following"><i class="fa-solid fa-user-plus"></i></div>
+                        <div class="stat-info">
+                            <h4>Following</h4>
+                            <span id="stat-following">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon repos"><i class="fa-solid fa-book-bookmark"></i></div>
+                        <div class="stat-info">
+                            <h4>Repositories</h4>
+                            <span id="stat-repos">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon gists"><i class="fa-solid fa-code"></i></div>
+                        <div class="stat-info">
+                            <h4>Gists</h4>
+                            <span id="stat-gists">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resume-Worthy Extra Stats -->
+                <div class="extra-stats-section glass-card">
+                    <h3><i class="fa-solid fa-chart-pie"></i> Developer Highlights</h3>
+                    <div class="extra-stats-grid">
+                        <div class="extra-stat">
+                            <span class="label">Total Stars Earned</span>
+                            <span class="value" id="total-stars">0 <i class="fa-solid fa-star star-color"></i></span>
+                        </div>
+                        <div class="extra-stat">
+                            <span class="label">Top Language</span>
+                            <span class="value" id="top-language">N/A</span>
+                        </div>
+                        <div class="extra-stat">
+                            <span class="label">Most Starred Repo</span>
+                            <a href="#" target="_blank" class="value repo-link" id="top-repo">N/A</a>
+                        </div>
+                    </div>
+                    <div class="language-bar-container" id="language-bar-container">
+                        <!-- Language bar inserted here -->
+                    </div>
+                    <div class="language-legend" id="language-legend">
+                        <!-- Language legend inserted here -->
+                    </div>
+                </div>
+                
+                <!-- Contribution Activity Placeholder -->
+                <div class="activity-section glass-card">
+                    <h3><i class="fa-solid fa-chart-line"></i> Activity (Placeholder)</h3>
+                    <p class="placeholder-text">Recent contributions visualization (GitHub GraphQL API / Auth required for actual data)</p>
+                    <div class="contribution-graph-placeholder" id="contribution-placeholder">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+
+                <!-- Repositories Section -->
+                <div class="repos-section">
+                    <div class="section-header">
+                        <h3><i class="fa-solid fa-book"></i> Latest Repositories</h3>
+                        <a href="#" id="view-all-repos" target="_blank" class="text-btn">View All</a>
+                    </div>
+                    <div class="repos-grid" id="repos-container">
+                        <!-- Repositories inserted here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <button id="back-to-top" class="icon-btn hidden" aria-label="Back to top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
